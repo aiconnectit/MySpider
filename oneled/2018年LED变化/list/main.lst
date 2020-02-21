@@ -1,0 +1,240 @@
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 14:08:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\list\main.lst) T
+                    -ABS(2) OBJECT(.\list\main.obj)
+
+line level    source
+
+   1          #include  "config.h"
+   2          #include  "GPIO.h"
+   3          #include  "delay.h"
+   4          #include  "timer.h"
+   5          #include  "key.h"
+   6          
+   7          
+   8          #define LED0_Pin GPIO_Pin_0
+   9          #define LED1_Pin GPIO_Pin_1
+  10          #define LED2_Pin GPIO_Pin_2
+  11          #define LED3_Pin GPIO_Pin_3
+  12          #define LED4_Pin GPIO_Pin_4
+  13          #define LED5_Pin GPIO_Pin_5
+  14          #define LED6_Pin GPIO_Pin_6
+  15          #define LEDs_NUM    sizeof (LED)/ sizeof(u8)
+  16          
+  17          #define BUZZER   P06
+  18          
+  19          u8 LED[] = {GPIO_Pin_0,GPIO_Pin_1,GPIO_Pin_2,GPIO_Pin_3,GPIO_Pin_4,GPIO_Pin_5,GPIO_Pin_6,GPIO_Pin_7};
+  20          //char i ;
+  21          u8 MODE = 2;
+  22          u16 cnt = 0;    //timer0计数
+  23          u8 n=0;
+  24          u8 nthree=0;
+  25          void  GPIO_config(void)
+  26          {
+  27   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
+  28   1        GPIO_InitStructure.Pin  = GPIO_Pin_All;   //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7, 或操作
+  29   1        GPIO_InitStructure.Mode = GPIO_PullUp;    //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
+             -OUT_PP
+  30   1        GPIO_Inilize(GPIO_P0,&GPIO_InitStructure);
+  31   1        GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);
+  32   1        GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);
+  33   1      }
+  34          void All_Init(void)
+  35          {
+  36   1        //P2 = (P2 & 0x1f) | 0x80;  //打开Y4C（LED）
+  37   1        //P0 = 0xff;          //关闭LED
+  38   1        //P2 = (P2 & 0x1f) | 0xe0;  //打开Y7C（数码管）
+  39   1        //P0 = 0xff;          //关闭数码管
+  40   1        P2 = (P2 & 0x1f) | 0xa0;  //打开Y5C
+  41   1        P0 = 0x00;          //关闭蜂鸣器、继电器
+  42   1        P2 = P2 & 0x1f;
+  43   1      }
+  44          void  Timer_config(void)
+  45          {
+  46   1        TIM_InitTypeDef   TIM_InitStructure;          //结构定义
+  47   1        TIM_InitStructure.TIM_Mode      = TIM_8BitAutoReload; //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM
+             -_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  48   1        TIM_InitStructure.TIM_Polity    = PolityLow;      //指定中断优先级, PolityHigh,PolityLow
+  49   1        TIM_InitStructure.TIM_Interrupt = ENABLE;//DISABLE;       //中断是否允许,   ENABLE或DISABLE
+  50   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;     //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
+             -Ext
+  51   1        TIM_InitStructure.TIM_ClkOut    = ENABLE;       //是否输出高速脉冲, ENABLE或DISABLE
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 14:08:59 PAGE 2   
+
+  52   1        TIM_InitStructure.TIM_Value     = 5;    //初值,
+  53   1        TIM_InitStructure.TIM_Run       = ENABLE;       //是否初始化后启动定时器, ENABLE或DISABLE
+  54   1        Timer_Inilize(Timer0,&TIM_InitStructure);       //初始化Timer0    Timer0,Timer1,Timer2
+  55   1      }
+  56          
+  57          void LED_LeftToRight(u8 Pinx)
+  58          {
+  59   1        
+  60   1        if (Pinx == 0) 
+  61   1        {
+  62   2          GPIO_WritePin(GPIO_P0, LED[0] ,1);  
+  63   2        }
+  64   1        else if (Pinx >= LEDs_NUM) 
+  65   1        {
+  66   2          GPIO_WritePin(GPIO_P0, LED[LEDs_NUM-1],0);
+  67   2        }
+  68   1        else 
+  69   1        {   
+  70   2          GPIO_WritePin(GPIO_P0, LED[Pinx],1);
+  71   2          Pinx--;
+  72   2          GPIO_WritePin(GPIO_P0, LED[Pinx],0);    
+  73   2        }
+  74   1      }
+  75          
+  76          void LED_RightToLeft(u8 Pinx)
+  77          {
+  78   1        
+  79   1        if (Pinx == 7) 
+  80   1        {
+  81   2          GPIO_WritePin(GPIO_P0, LED[0] ,1);  
+  82   2        }
+  83   1        else if (Pinx <= 0) 
+  84   1        {
+  85   2          GPIO_WritePin(GPIO_P0, LED[0],0);
+  86   2        }
+  87   1        else 
+  88   1        {   
+  89   2          GPIO_WritePin(GPIO_P0, LED[Pinx],1);
+  90   2          Pinx++;
+  91   2          GPIO_WritePin(GPIO_P0, LED[Pinx],0);    
+  92   2        }
+  93   1      }
+  94          
+  95          void mode_three(u8 Pinx)//模式3
+  96          {
+  97   1          GPIO_WritePin(GPIO_P0 , LED[Pinx] , 1);
+  98   1          GPIO_WritePin(GPIO_P0 , LED[7-Pinx] , 1);
+  99   1      }
+ 100          void mode_four(u8 Pinx)//模式4
+ 101          {
+ 102   1      
+ 103   1          GPIO_WritePin(GPIO_P1 , LED[Pinx] , 1);
+ 104   1          GPIO_WritePin(GPIO_P1 , LED[7-Pinx] , 1);
+ 105   1          
+ 106   1         
+ 107   1      }
+ 108          void timer0_int (void) interrupt TIMER0_VECTOR
+ 109          {   
+ 110   1          cnt++ ;
+ 111   1          if(cnt ==10000) 
+ 112   1          { 
+ 113   2            cnt=0;
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 14:08:59 PAGE 3   
+
+ 114   2            n=1;
+ 115   2          }
+ 116   1      
+ 117   1         
+ 118   1      }
+ 119          
+ 120          
+ 121          /******************** 主函数 **************************/
+ 122          void main(void)
+ 123          {
+ 124   1        u8 i=0,j=7,v=0,x=3,key_led=0;
+ 125   1        All_Init();
+ 126   1        GPIO_config();
+ 127   1        Timer_config();
+ 128   1        EA = 1;
+ 129   1        P2=0x80;
+ 130   1        while(1)
+ 131   1        { 
+ 132   2          if(GetKeyVal_Button()==S5DOWN)
+ 133   2          {
+ 134   3            key_led++;
+ 135   3            if(key_led>4)
+ 136   3            {
+ 137   4              key_led=0;
+ 138   4            }
+ 139   3            
+ 140   3          }
+ 141   2          
+ 142   2          switch (key_led) 
+ 143   2          {
+ 144   3            case 1:
+ 145   3            {
+ 146   4              if(n==1)
+ 147   4              {
+ 148   5                n=0;
+ 149   5                LED_LeftToRight(i);
+ 150   5                i++;
+ 151   5                if(i>8)
+ 152   5                {
+ 153   6                  i=0;
+ 154   6                }
+ 155   5              }
+ 156   4            }
+ 157   3            break;
+ 158   3            
+ 159   3            case 2:
+ 160   3            {
+ 161   4              if(n==1)
+ 162   4              {
+ 163   5                n=0;
+ 164   5                
+ 165   5                LED_RightToLeft(j);
+ 166   5                j--;  
+ 167   5                if(j<0)
+ 168   5                {
+ 169   6                  j=7;
+ 170   6                }
+ 171   5              }
+ 172   4            }
+ 173   3            break;
+ 174   3            
+ 175   3            case 3:
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 14:08:59 PAGE 4   
+
+ 176   3            {
+ 177   4              if(n==1)
+ 178   4              {
+ 179   5                n=0;
+ 180   5                mode_three(v);
+ 181   5                v++;
+ 182   5                if(v>4)
+ 183   5                {
+ 184   6                  v=0;
+ 185   6                }
+ 186   5              }
+ 187   4            }
+ 188   3            break;
+ 189   3          
+ 190   3            case 4:
+ 191   3            {
+ 192   4              if(n==1)
+ 193   4              {
+ 194   5                mode_four(x);
+ 195   5                x--;
+ 196   5                if(x<0)
+ 197   5                {
+ 198   6                  x=3;
+ 199   6                }
+ 200   5              }
+ 201   4            }
+ 202   3            break;
+ 203   3         }
+ 204   2       }
+ 205   1        
+ 206   1      }
+ 207          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    465    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13      19
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

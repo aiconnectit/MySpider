@@ -1,0 +1,169 @@
+C51 COMPILER V9.54   KEY                                                                   02/20/2020 20:03:48 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\list\Key.obj
+COMPILER INVOKED BY: D:\MDK5\C51\BIN\C51.EXE Key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\list\Key.lst) TAB
+                    -S(2) OBJECT(.\list\Key.obj)
+
+line level    source
+
+   1          #include "Key.h"
+   2          #include "Delay.h"
+   3          
+   4          
+   5          code uChar8 RowScanVal[4] = {0xfe, 0xfd, 0xfb, 0xf7}; //键盘逐行扫描值
+   6          /**********************************************************
+   7          函数名称：GetKeyVal_Button
+   8          函数功能：读取独立按键，仅采集按下动作，返回按键字面值
+   9          入口参数：无
+  10          出口参数：KeyVal按下键的字面值
+  11          备注：
+  12          **********************************************************/
+  13          uChar8 GetKeyVal_Button(void) //独立式按键读取键值函数
+  14          {
+  15   1        static uChar8 k4_old = 0x0f;    //上次按键电平值
+  16   1        static KeyState_T S6State = NoKey;  //S6微状态
+  17   1        static uChar8 S6_LOW_cnt = 0;   //S6低电平计时器
+  18   1        uChar8 k4_now, tmp, KeyVal;
+  19   1        
+  20   1        P3 = 0xff;
+  21   1        Delay5US();
+  22   1        k4_now = P3 & 0x0f;   //读取按键值（低四位）
+  23   1        
+  24   1        tmp = k4_old ^ k4_now;  //异或求变化，有变化的位为1
+  25   1        if(tmp)         //若按键有新动作，不支持组合键，仅对按键按下有响应
+  26   1        {
+  27   2          S6_LOW_cnt = 0;   
+  28   2          switch(tmp)
+  29   2          {
+  30   3            case 0x01:  if(S7)
+  31   3                    KeyVal = NOKEY;   //S7松开
+  32   3                  else
+  33   3                    KeyVal = S7DOWN;  //S7按下
+  34   3                  break;
+  35   3            case 0x02:  if(S6)
+  36   3                    KeyVal = NOKEY;   //S6松开
+  37   3                  else
+  38   3                  {
+  39   4                    KeyVal = S6DOWN;  //S6按下
+  40   4                    S6State = KeyDown;
+  41   4                  }
+  42   3                  break;
+  43   3            case 0x04:  if(S5)
+  44   3                    KeyVal = NOKEY;   //S5松开
+  45   3                  else
+  46   3                    KeyVal = S5DOWN;  //S5按下
+  47   3                  break;
+  48   3            case 0x08:  if(S4)
+  49   3                    KeyVal = NOKEY;   //S4松开
+  50   3                  else
+  51   3                    KeyVal = S4DOWN;  //S4按下
+  52   3                  break;
+  53   3            default:  KeyVal = NOKEY; 
+  54   3                  break;
+C51 COMPILER V9.54   KEY                                                                   02/20/2020 20:03:48 PAGE 2   
+
+  55   3          }
+  56   2        }
+  57   1        else    //无变化，需要考虑S6长按
+  58   1        {
+  59   2          if(!S6)
+  60   2          {
+  61   3            if(S6State == KeyDown)
+  62   3            {
+  63   4              if(++ S6_LOW_cnt == 80) //0.8秒
+  64   4              {
+  65   5                S6State = KeyHold;
+  66   5                KeyVal = S6HOLD;
+  67   5              }
+  68   4              else
+  69   4                KeyVal = NOKEY;   //不到0.8秒
+  70   4            }
+  71   3            else if(S6State == KeyHold) //超过0.8秒
+  72   3              KeyVal = S6HOLD;
+  73   3          }
+  74   2          KeyVal = NOKEY;
+  75   2        } 
+  76   1        k4_old = k4_now;  //备份本次按键电平值
+  77   1        return KeyVal;
+  78   1      }
+  79          
+  80          /**********************************************************
+  81          函数名称：GetKeyVal_Keyboard
+  82          函数功能：读取当前行的按键电平，对比上次该行的电平值
+  83          仅采集按下动作，返回按键字面值，并扫描下一行按键
+  84          入口参数：无
+  85          出口参数：KeyVal按下键的字面值
+  86          备注：不支持组合键
+  87          **********************************************************/
+  88          uChar8 GetKeyVal_Keyboard(void) //行列式按键读取键值函数
+  89          {
+  90   1        static uChar8 column_old[4] = {0xf0, 0xf0, 0xf0, 0xf0}; //备份的上次读取列的电平值，共4行�
+             -��
+  91   1                                  //函数每执行一次，备份一行即更新一个元素
+  92   1        static uChar8 row_i = 0;  //当前行索引
+  93   1        
+  94   1        uChar8 column_now, tmp, col, colrow, KeyVal;
+  95   1        
+  96   1        col = 0x80;
+  97   1        column_now = P3 & 0xf0;   //读取当前行对应的列电平值，高四位有效
+  98   1        
+  99   1        tmp = column_now ^ column_old[row_i]; //异或求变化，有变化的位为1
+ 100   1        
+ 101   1        if(tmp)     //有变化
+ 102   1        {
+ 103   2          while(tmp <<= 1)
+ 104   2            col >>= 1;    //确定列号
+ 105   2          if(col & column_now)
+ 106   2            KeyVal = NOKEY; //松开
+ 107   2          else
+ 108   2          {
+ 109   3            colrow = col | (1 << row_i);  //组成行列值
+ 110   3            switch(colrow)
+ 111   3            {
+ 112   4              case 0x88:  KeyVal = S4DOWN; break;
+ 113   4              case 0x84:  KeyVal = S5DOWN; break;
+ 114   4              case 0x82:  KeyVal = S6DOWN; break;
+ 115   4              case 0x81:  KeyVal = S7DOWN; break;
+C51 COMPILER V9.54   KEY                                                                   02/20/2020 20:03:48 PAGE 3   
+
+ 116   4              case 0x48:  KeyVal = S8DOWN; break;
+ 117   4              case 0x44:  KeyVal = S9DOWN; break;
+ 118   4              case 0x42:  KeyVal = S10DOWN; break;
+ 119   4              case 0x41:  KeyVal = S11DOWN; break;
+ 120   4              case 0x28:  KeyVal = S12DOWN; break;
+ 121   4              case 0x24:  KeyVal = S13DOWN; break;
+ 122   4              case 0x22:  KeyVal = S14DOWN; break;
+ 123   4              case 0x21:  KeyVal = S15DOWN; break;
+ 124   4              case 0x18:  KeyVal = S16DOWN; break;
+ 125   4              case 0x14:  KeyVal = S17DOWN; break;
+ 126   4              case 0x12:  KeyVal = S18DOWN; break;
+ 127   4              case 0x11:  KeyVal = S19DOWN; break;
+ 128   4              default: KeyVal = NOKEY; break;
+ 129   4            }
+ 130   3          }
+ 131   2          
+ 132   2        }
+ 133   1        else      //无变化
+ 134   1        {
+ 135   2          KeyVal = NOKEY;
+ 136   2        }
+ 137   1        column_old[row_i++] = column_now; //备份当前行扫描值
+ 138   1        P3 = RowScanVal[row_i];       //扫描下一行
+ 139   1        return KeyVal;
+ 140   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    348    ----
+   CONSTANT SIZE    =      4    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
