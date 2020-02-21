@@ -12,16 +12,15 @@
 #define LED4_Pin GPIO_Pin_4
 #define LED5_Pin GPIO_Pin_5
 #define LED6_Pin GPIO_Pin_6
-#define LEDs_NUM    sizeof (LED)/ sizeof(u8)
+
 
 #define BUZZER   P06
 
 u8 LED[] = {GPIO_Pin_0,GPIO_Pin_1,GPIO_Pin_2,GPIO_Pin_3,GPIO_Pin_4,GPIO_Pin_5,GPIO_Pin_6,GPIO_Pin_7};
-//char i ;
-u8 MODE = 2;
+
 u16 cnt = 0;    //timer0计数
 u8 n=0;
-u8 nthree=0;
+
 void	GPIO_config(void)
 {
 	GPIO_InitTypeDef	GPIO_InitStructure;		//结构定义
@@ -31,16 +30,7 @@ void	GPIO_config(void)
 	GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);
 	GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);
 }
-void All_Init(void)
-{
-	//P2 = (P2 & 0x1f) | 0x80;	//打开Y4C（LED）
-	//P0 = 0xff;					//关闭LED
-	//P2 = (P2 & 0x1f) | 0xe0;	//打开Y7C（数码管）
-	//P0 = 0xff;					//关闭数码管
-	P2 = (P2 & 0x1f) | 0xa0;	//打开Y5C
-	P0 = 0x00;					//关闭蜂鸣器、继电器
-	P2 = P2 & 0x1f;
-}
+
 void	Timer_config(void)
 {
 	TIM_InitTypeDef		TIM_InitStructure;					//结构定义
@@ -54,55 +44,30 @@ void	Timer_config(void)
 	Timer_Inilize(Timer0,&TIM_InitStructure);				//初始化Timer0	  Timer0,Timer1,Timer2
 }
 
-void LED_LeftToRight(u8 Pinx)
+void LED_LeftToRight(u8 Pinx) //模式1
 {
-  
-  if (Pinx == 0) 
-  {
-    GPIO_WritePin(GPIO_P0, LED[0] ,1);  
-  }
-  else if (Pinx >= LEDs_NUM) 
-  {
-    GPIO_WritePin(GPIO_P0, LED[LEDs_NUM-1],0);
-  }
-  else 
-  {   
-    GPIO_WritePin(GPIO_P0, LED[Pinx],1);
-    Pinx--;
-    GPIO_WritePin(GPIO_P0, LED[Pinx],0);    
-  }
+  P0 = 0xff;
+  GPIO_WritePin(GPIO_P0 , LED[Pinx], 1); 
 }
 
-void LED_RightToLeft(u8 Pinx)
+void LED_RightToLeft(u8 Pinx)//模式2
 {
-  
-  if (Pinx == 7) 
-  {
-    GPIO_WritePin(GPIO_P0, LED[0] ,1);  
-  }
-  else if (Pinx <= 0) 
-  {
-    GPIO_WritePin(GPIO_P0, LED[0],0);
-  }
-  else 
-  {   
-    GPIO_WritePin(GPIO_P0, LED[Pinx],1);
-    Pinx++;
-    GPIO_WritePin(GPIO_P0, LED[Pinx],0);    
-  }
+  P0 = 0xff;
+  GPIO_WritePin(GPIO_P0 , LED[Pinx], 1); 
+	
 }
 
 void mode_three(u8 Pinx)//模式3
 {
+		P0 = 0xff;
 		GPIO_WritePin(GPIO_P0 , LED[Pinx] , 1);
 		GPIO_WritePin(GPIO_P0 , LED[7-Pinx] , 1);
 }
 void mode_four(u8 Pinx)//模式4
 {
-
-		GPIO_WritePin(GPIO_P1 , LED[Pinx] , 1);
-		GPIO_WritePin(GPIO_P1 , LED[7-Pinx] , 1);
-		
+    P0 = 0xff;
+		GPIO_WritePin(GPIO_P0 , LED[Pinx] , 1);
+		GPIO_WritePin(GPIO_P0 , LED[7-Pinx] , 1);
 	 
 }
 void timer0_int (void) interrupt TIMER0_VECTOR
@@ -113,16 +78,14 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 			cnt=0;
 			n=1;
 		}
-
-	 
 }
 
 
 /******************** 主函数 **************************/
 void main(void)
 {
-  u8 i=0,j=7,v=0,x=3,key_led=0;
-	All_Init();
+  u8 i=0,j=7,v=0,x=3,key_led=1;
+
 	GPIO_config();
 	Timer_config();
 	EA = 1;
@@ -134,7 +97,7 @@ void main(void)
 			key_led++;
 			if(key_led>4)
 			{
-				key_led=0;
+				key_led=1;
 			}
 			
 		}
@@ -161,13 +124,12 @@ void main(void)
 				if(n==1)
 				{
 					n=0;
-					
 					LED_RightToLeft(j);
-				  j--;	
-					if(j<0)
+					if(j<=0)
 					{
 						j=7;
-					}
+					} 
+					j--;	
 				}
 			}
 			break;
@@ -192,11 +154,11 @@ void main(void)
 				if(n==1)
 				{
 					mode_four(x);
-					x--;
-					if(x<0)
+					if(x<=0)
 					{
 						x=3;
 					}
+					x--;
 				}
 			}
 			break;

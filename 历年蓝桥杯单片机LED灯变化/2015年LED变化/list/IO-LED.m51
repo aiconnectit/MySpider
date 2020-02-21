@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/20/2020  20:03:48  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/21/2020  21:54:55  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -33,12 +33,11 @@ LINK MAP OF MODULE:  .\list\IO-LED (GPIO)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
             DATA    0008H     000AH     UNIT         _DATA_GROUP_
             DATA    0012H     0008H     UNIT         ?DT?KEY
-            DATA    001AH     0002H     UNIT         ?DT?MAIN
-            DATA    001CH     0002H     UNIT         ?DT?GETKEYVAL_KEYBOARD?KEY
-                    001EH     0002H                  *** GAP ***
-            BIT     0020H.0   0000H.3   UNIT         ?BI?MAIN
-            BIT     0020H.3   0000H.1   UNIT         _BIT_GROUP_
-                    0020H.4   0000H.4                *** GAP ***
+            DATA    001AH     0003H     UNIT         ?DT?MAIN
+            DATA    001DH     0002H     UNIT         ?DT?GETKEYVAL_KEYBOARD?KEY
+                    001FH     0001H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.1   0000H.7                *** GAP ***
             IDATA   0021H     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
@@ -59,17 +58,17 @@ LINK MAP OF MODULE:  .\list\IO-LED (GPIO)
             CODE    022AH     0190H     UNIT         ?PR?_TIMER_INILIZE?TIMER
             CODE    03BAH     00E2H     UNIT         ?PR?GETKEYVAL_KEYBOARD?KEY
             CODE    049CH     00A4H     UNIT         ?C?LIB_CODE
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 2
-
-
             CODE    0540H     008CH     UNIT         ?C_C51STARTUP
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 2
+
+
             CODE    05CCH     007AH     UNIT         ?PR?GETKEYVAL_BUTTON?KEY
             CODE    0646H     0069H     UNIT         ?PR?_GPIO_WRITEPIN?GPIO
-            CODE    06AFH     0049H     UNIT         ?PR?MAIN?MAIN
-            CODE    06F8H     001DH     UNIT         ?C_INITSEG
-            CODE    0715H     0019H     UNIT         ?PR?TIMER0_INT?MAIN
-            CODE    072EH     0016H     UNIT         ?PR?_DELAY_MS?DELAY
-            CODE    0744H     0003H     UNIT         ?PR?TIMER2_INT?TIMER
+            CODE    06AFH     0048H     UNIT         ?PR?MAIN?MAIN
+            CODE    06F7H     0022H     UNIT         ?PR?TIMER0_INT?MAIN
+            CODE    0719H     001AH     UNIT         ?C_INITSEG
+            CODE    0733H     0016H     UNIT         ?PR?_DELAY_MS?DELAY
+            CODE    0749H     0003H     UNIT         ?PR?TIMER2_INT?TIMER
 
 
 
@@ -88,7 +87,6 @@ SEGMENT                               BIT_GROUP          DATA_GROUP
   +--> ?PR?TIMER_CONFIG?MAIN
   +--> ?PR?GETKEYVAL_BUTTON?KEY
   +--> ?PR?_GPIO_WRITEPIN?GPIO
-  +--> ?PR?_DELAY_MS?DELAY
 
 ?PR?GPIO_CONFIG?MAIN               -----    -----      000AH    0002H
   +--> ?PR?_GPIO_INILIZE?GPIO
@@ -99,7 +97,7 @@ SEGMENT                               BIT_GROUP          DATA_GROUP
 ?PR?GETKEYVAL_BUTTON?KEY           -----    -----      000AH    0001H
   +--> ?PR?DELAY5US?DELAY
 
-?PR?_GPIO_WRITEPIN?GPIO            0020H.3  0000H.1    -----    -----
+?PR?_GPIO_WRITEPIN?GPIO            0020H.0  0000H.1    -----    -----
 
 
 
@@ -119,11 +117,11 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:0095H         PUBLIC        P2M1
   D:0090H         PUBLIC        P1
   D:00B4H         PUBLIC        P4M0
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 3
-
-
   D:00B1H         PUBLIC        P3M1
   D:00A0H         PUBLIC        P2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 3
+
+
   D:00CAH         PUBLIC        P5M0
   D:00B3H         PUBLIC        P4M1
   D:00B0H         PUBLIC        P3
@@ -179,11 +177,11 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:0197H         LINE#         63
   C:019CH         LINE#         64
   C:019CH         LINE#         65
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 4
-
-
   C:01ADH         LINE#         66
   C:01BCH         LINE#         67
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 4
+
+
   C:01CCH         LINE#         68
   C:01DFH         LINE#         69
   C:01DFH         LINE#         70
@@ -199,7 +197,7 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   -------         PROC          _GPIO_WRITEPIN
   D:0007H         SYMBOL        GPIO
   D:0005H         SYMBOL        Pinx
-  B:0020H.3       SYMBOL        Level
+  B:0020H.0       SYMBOL        Level
   C:0646H         LINE#         88
   C:0646H         LINE#         89
   C:0646H         LINE#         90
@@ -239,11 +237,11 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:06A1H         LINE#         129
   C:06A5H         LINE#         130
   C:06AAH         LINE#         132
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 5
-
-
   C:06ACH         LINE#         133
   C:06ACH         LINE#         134
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 5
+
+
   C:06AEH         LINE#         135
   -------         ENDPROC       _GPIO_WRITEPIN
   -------         ENDMOD        GPIO
@@ -252,7 +250,7 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0080H         PUBLIC        P0
   D:0090H         PUBLIC        P1
-  C:0715H         PUBLIC        timer0_int
+  C:06F7H         PUBLIC        timer0_int
   D:00A0H         PUBLIC        P2
   D:00B0H         PUBLIC        P3
   D:00C0H         PUBLIC        P4
@@ -268,78 +266,83 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:00F0H         PUBLIC        B
   D:001AH         PUBLIC        cnt
   D:00E0H         PUBLIC        ACC
-  B:0020H.0       PUBLIC        K
   C:0043H         PUBLIC        Timer_config
-  B:0020H.1       PUBLIC        d
-  B:0020H.2       PUBLIC        n
+  D:001CH         PUBLIC        n
   D:00D0H         PUBLIC        PSW
   -------         PROC          GPIO_CONFIG
   -------         DO            
   D:000AH         SYMBOL        GPIO_InitStructure
   -------         ENDDO         
-  C:001EH         LINE#         23
+  C:001EH         LINE#         21
+  C:001EH         LINE#         22
   C:001EH         LINE#         24
-  C:001EH         LINE#         26
-  C:0021H         LINE#         27
-  C:0024H         LINE#         28
-  C:002DH         LINE#         29
-  C:0038H         LINE#         30
+  C:0021H         LINE#         25
+  C:0024H         LINE#         26
+  C:002DH         LINE#         27
+  C:0038H         LINE#         28
   -------         ENDPROC       GPIO_CONFIG
   -------         PROC          TIMER_CONFIG
   -------         DO            
   D:000AH         SYMBOL        TIM_InitStructure
   -------         ENDDO         
-  C:0043H         LINE#         33
+  C:0043H         LINE#         31
+  C:0043H         LINE#         32
   C:0043H         LINE#         34
-  C:0043H         LINE#         36
-  C:0046H         LINE#         37
-  C:0049H         LINE#         38
-  C:004CH         LINE#         39
-  C:004EH         LINE#         40
-  C:0051H         LINE#         41
-  C:0056H         LINE#         42
-  C:0059H         LINE#         43
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 6
-
-
+  C:0046H         LINE#         35
+  C:0049H         LINE#         36
+  C:004CH         LINE#         37
+  C:004EH         LINE#         38
+  C:0051H         LINE#         39
+  C:0056H         LINE#         40
+  C:0059H         LINE#         41
   -------         ENDPROC       TIMER_CONFIG
   -------         PROC          TIMER0_INT
-  C:0715H         LINE#         48
-  C:0717H         LINE#         50
-  C:071FH         LINE#         51
-  C:0725H         LINE#         52
-  C:0725H         LINE#         53
-  C:0729H         LINE#         54
-  C:072BH         LINE#         56
-  C:072BH         LINE#         58
+  C:06F7H         LINE#         46
+  C:06FBH         LINE#         48
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 6
+
+
+  C:0703H         LINE#         49
+  C:070BH         LINE#         50
+  C:070BH         LINE#         51
+  C:0711H         LINE#         52
+  C:0714H         LINE#         54
+  C:0714H         LINE#         56
   -------         ENDPROC       TIMER0_INT
   -------         PROC          MAIN
   -------         DO            
   D:0008H         SYMBOL        key_led
   -------         ENDDO         
+  C:06AFH         LINE#         60
+  C:06AFH         LINE#         61
   C:06AFH         LINE#         62
-  C:06AFH         LINE#         63
-  C:06AFH         LINE#         64
-  C:06B4H         LINE#         65
-  C:06B7H         LINE#         66
-  C:06BAH         LINE#         67
+  C:06B4H         LINE#         63
+  C:06B7H         LINE#         64
+  C:06BAH         LINE#         65
+  C:06BCH         LINE#         66
+  C:06BCH         LINE#         67
   C:06BCH         LINE#         68
-  C:06BCH         LINE#         69
-  C:06BCH         LINE#         70
-  C:06BFH         LINE#         71
+  C:06BFH         LINE#         69
+  C:06C5H         LINE#         70
   C:06C5H         LINE#         72
-  C:06C5H         LINE#         73
-  C:06CBH         LINE#         74
-  C:06CBH         LINE#         76
-  C:06D3H         LINE#         77
-  C:06D3H         LINE#         78
-  C:06DBH         LINE#         79
-  C:06DDH         LINE#         80
-  C:06DDH         LINE#         82
-  C:06E6H         LINE#         83
-  C:06EDH         LINE#         84
-  C:06F6H         LINE#         85
-  C:06F6H         LINE#         86
+  C:06CBH         LINE#         73
+  C:06CBH         LINE#         75
+  C:06D7H         LINE#         76
+  C:06D7H         LINE#         77
+  C:06D7H         LINE#         78
+  C:06D7H         LINE#         79
+  C:06DAH         LINE#         80
+  C:06DFH         LINE#         81
+  C:06DFH         LINE#         82
+  C:06E2H         LINE#         83
+  C:06EAH         LINE#         84
+  C:06EAH         LINE#         85
+  C:06EAH         LINE#         86
+  C:06ECH         LINE#         88
+  C:06ECH         LINE#         89
+  C:06ECH         LINE#         90
+  C:06F5H         LINE#         91
+  C:06F5H         LINE#         92
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
@@ -356,14 +359,14 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:00D8H         PUBLIC        CCON
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 7
+
+
   D:00F0H         PUBLIC        B
   D:00E0H         PUBLIC        ACC
   C:000EH         PUBLIC        Delay1US
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 7
-
-
   C:0003H         PUBLIC        Delay5US
-  C:072EH         PUBLIC        _delay_ms
+  C:0733H         PUBLIC        _delay_ms
   D:00D0H         PUBLIC        PSW
   -------         PROC          _DELAY_MS
   D:0006H         SYMBOL        ms
@@ -371,18 +374,18 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:0005H         SYMBOL        i
   D:0004H         SYMBOL        j
   -------         ENDDO         
-  C:072EH         LINE#         43
-  C:072EH         LINE#         44
-  C:072EH         LINE#         46
-  C:0738H         LINE#         47
-  C:0738H         LINE#         48
-  C:0739H         LINE#         49
-  C:073BH         LINE#         50
-  C:073DH         LINE#         52
-  C:073DH         LINE#         53
-  C:073FH         LINE#         54
-  C:0741H         LINE#         55
-  C:0743H         LINE#         56
+  C:0733H         LINE#         43
+  C:0733H         LINE#         44
+  C:0733H         LINE#         46
+  C:073DH         LINE#         47
+  C:073DH         LINE#         48
+  C:073EH         LINE#         49
+  C:0740H         LINE#         50
+  C:0742H         LINE#         52
+  C:0742H         LINE#         53
+  C:0744H         LINE#         54
+  C:0746H         LINE#         55
+  C:0748H         LINE#         56
   -------         ENDPROC       _DELAY_MS
   -------         PROC          DELAY1US
   C:000EH         LINE#         58
@@ -412,16 +415,16 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:00A0H         PUBLIC        P2
   C:0016H         PUBLIC        timer1_int
   D:00B0H         PUBLIC        P3
-  C:0744H         PUBLIC        timer2_int
+  C:0749H         PUBLIC        timer2_int
   D:00C0H         PUBLIC        P4
   D:00C8H         PUBLIC        P5
   D:00A8H         PUBLIC        IE
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 8
+
+
   D:00B8H         PUBLIC        IP
   D:00D8H         PUBLIC        CCON
   B:0090H.0       PUBLIC        P10
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 8
-
-
   D:0098H         PUBLIC        SCON
   D:0089H         PUBLIC        TMOD
   D:0088H         PUBLIC        TCON
@@ -451,9 +454,9 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:0018H         LINE#         36
   -------         ENDPROC       TIMER1_INT
   -------         PROC          TIMER2_INT
-  C:0744H         LINE#         39
-  C:0744H         LINE#         41
-  C:0746H         LINE#         42
+  C:0749H         LINE#         39
+  C:0749H         LINE#         41
+  C:074BH         LINE#         42
   -------         ENDPROC       TIMER2_INT
   -------         PROC          _TIMER_INILIZE
   D:0005H         SYMBOL        TIM
@@ -476,12 +479,12 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:0287H         LINE#         68
   C:028AH         LINE#         69
   C:0298H         LINE#         70
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 9
+
+
   C:029BH         LINE#         72
   C:02A3H         LINE#         73
   C:02A5H         LINE#         74
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 9
-
-
   C:02B0H         LINE#         75
   C:02B3H         LINE#         76
   C:02B3H         LINE#         78
@@ -536,12 +539,12 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   D:00C8H         PUBLIC        P5
   C:03BAH         PUBLIC        GetKeyVal_Keyboard
   D:00A8H         PUBLIC        IE
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 10
+
+
   D:00B8H         PUBLIC        IP
   D:00D8H         PUBLIC        CCON
   B:00B0H.0       PUBLIC        P30
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 10
-
-
   B:00B0H.1       PUBLIC        P31
   D:0098H         PUBLIC        SCON
   B:00B0H.2       PUBLIC        P32
@@ -596,12 +599,12 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:061DH         LINE#         55
   C:061DH         LINE#         56
   C:061DH         LINE#         58
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 11
+
+
   C:061DH         LINE#         59
   C:0620H         LINE#         60
   C:0620H         LINE#         61
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 11
-
-
   C:0625H         LINE#         62
   C:0625H         LINE#         63
   C:062CH         LINE#         64
@@ -623,11 +626,11 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   -------         DO            
   D:0015H         SYMBOL        column_old
   D:0019H         SYMBOL        row_i
-  D:001CH         SYMBOL        column_now
+  D:001DH         SYMBOL        column_now
   D:0006H         SYMBOL        tmp
   D:0007H         SYMBOL        col
   D:0007H         SYMBOL        colrow
-  D:001DH         SYMBOL        KeyVal
+  D:001EH         SYMBOL        KeyVal
   -------         ENDDO         
   C:03BAH         LINE#         88
   C:03BAH         LINE#         89
@@ -656,12 +659,12 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   C:045FH         LINE#         121
   C:0464H         LINE#         122
   C:0469H         LINE#         123
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/21/2020  21:54:55  PAGE 12
+
+
   C:046EH         LINE#         124
   C:0473H         LINE#         125
   C:0478H         LINE#         126
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/20/2020  20:03:48  PAGE 12
-
-
   C:047DH         LINE#         127
   C:0482H         LINE#         128
   C:0484H         LINE#         129
@@ -694,10 +697,13 @@ SYMBOL TABLE OF MODULE:  .\list\IO-LED (GPIO)
   -------         ENDMOD        ?C?CCASE
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?DELAY1US?DELAY
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?GETKEYVAL_KEYBOARD?KEY
 
-Program Size: data=31.4 xdata=0 code=1858
-LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)
+Program Size: data=32.1 xdata=0 code=1863
+LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)

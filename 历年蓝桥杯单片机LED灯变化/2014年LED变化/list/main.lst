@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   MAIN                                                                  02/20/2020 19:45:47 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 21:19:18 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
@@ -14,136 +14,106 @@ line level    source
    4          #include  "timer.h"
    5          #include  "key.h"
    6          
-   7          #define BUZZER   P06
-   8          
-   9          
-  10          #define LED0_Pin GPIO_Pin_0
-  11          #define LED1_Pin GPIO_Pin_1
-  12          #define LED2_Pin GPIO_Pin_2
-  13          #define LED3_Pin GPIO_Pin_3
-  14          #define LED4_Pin GPIO_Pin_4
-  15          #define LED5_Pin GPIO_Pin_5
-  16          #define LED6_Pin GPIO_Pin_6
-  17          
-  18          u16 cnt = 0;    //timer0计数
-  19          bit n=0;
-  20          bit K=0;
-  21          bit d=0;
-  22          
-  23          void  GPIO_config(void)
-  24          {
-  25   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
-  26   1        GPIO_InitStructure.Pin  = GPIO_Pin_All;   //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7, 或操作
-  27   1        GPIO_InitStructure.Mode = GPIO_PullUp;    //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
+   7          #define LED0_Pin GPIO_Pin_0
+   8          #define LED1_Pin GPIO_Pin_1
+   9          #define LED2_Pin GPIO_Pin_2
+  10          #define LED3_Pin GPIO_Pin_3
+  11          #define LED4_Pin GPIO_Pin_4
+  12          #define LED5_Pin GPIO_Pin_5
+  13          #define LED6_Pin GPIO_Pin_6
+  14          
+  15          void All_Init(void)
+  16          {
+  17   1        
+  18   1        P0 = 0xff;          //关闭数码管
+  19   1        P2 = (P2 & 0x1f) | 0xa0;  //打开Y5C
+  20   1        P0 = 0x00;          //关闭蜂鸣器、继电器
+  21   1        P2 = P2 & 0x1f;
+  22   1      }
+  23          
+  24          void  GPIO_config(void)
+  25          {
+  26   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
+  27   1        GPIO_InitStructure.Pin  = GPIO_Pin_All;   //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7, 或操作
+  28   1        GPIO_InitStructure.Mode = GPIO_PullUp;    //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
              -OUT_PP
-  28   1        GPIO_Inilize(GPIO_P0,&GPIO_InitStructure);
-  29   1        GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);
-  30   1        GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);
-  31   1      }
-  32          
-  33          void  Timer_config(void)
-  34          {
-  35   1        TIM_InitTypeDef   TIM_InitStructure;          //结构定义
-  36   1        TIM_InitStructure.TIM_Mode      = TIM_8BitAutoReload; //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM
-             -_8BitAutoReload,TIM_16BitAutoReloadNoMask
-  37   1        TIM_InitStructure.TIM_Polity    = PolityLow;      //指定中断优先级, PolityHigh,PolityLow
-  38   1        TIM_InitStructure.TIM_Interrupt = ENABLE;//DISABLE;       //中断是否允许,   ENABLE或DISABLE
-  39   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;     //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
-             -Ext
-  40   1        TIM_InitStructure.TIM_ClkOut    = ENABLE;       //是否输出高速脉冲, ENABLE或DISABLE
-  41   1        TIM_InitStructure.TIM_Value     = 5;    //初值,
-  42   1        TIM_InitStructure.TIM_Run       = ENABLE;       //是否初始化后启动定时器, ENABLE或DISABLE
-  43   1        Timer_Inilize(Timer0,&TIM_InitStructure);       //初始化Timer0    Timer0,Timer1,Timer2
-  44   1      }
-  45          
-  46          
-  47          
-  48          void timer0_int (void) interrupt TIMER0_VECTOR
-  49          {   
-  50   1          cnt++ ;
-  51   1         // if( cnt <= 4*BUZZER_CLOSE)  BUZZER = 0;
-C51 COMPILER V9.54   MAIN                                                                  02/20/2020 19:45:47 PAGE 2   
+  29   1        GPIO_Inilize(GPIO_P0,&GPIO_InitStructure);
+  30   1        GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);
+  31   1        GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);
+  32   1      }
+  33          /*
+  34          void TWO_init(u8 pinx)
+  35          {
+  36            
+  37            
+  38          }
+  39          */
+  40          /******************** 主函数 **************************/
+  41          void main(void)
+  42          {
+  43   1        u16 key_led=1;
+  44   1        All_Init();
+  45   1        GPIO_config();
+  46   1        while(1)
+  47   1        {
+  48   2          
+  49   2          P2=0x80;
+  50   2          if(GetKeyVal_Button()==S5DOWN)
+  51   2          {
+  52   3            key_led++;
+  53   3            if(key_led>3)
+C51 COMPILER V9.54   MAIN                                                                  02/21/2020 21:19:18 PAGE 2   
 
-  52   1          //else if(cnt <= (4*BUZZER_OPEN + 4*BUZZER_CLOSE))  BUZZER = 1;
-  53   1          if(cnt ==200) n=1;
-  54   1          else if(cnt ==400)  K=1;
-  55   1          else if(cnt ==800) d=1;
-  56   1          cnt=0;
-  57   1            
-  58   1          
-  59   1          
-  60   1      }
-  61          
-  62          
-  63          /******************** 主函数 **************************/
-  64          void main(void)
-  65          {
-  66   1        u16 key_led=0;
-  67   1        GPIO_config();
-  68   1        Timer_config();
-  69   1        EA = 1;
-  70   1        while(1)
-  71   1        {
-  72   2          P2=0x80;
-  73   2          if(GetKeyVal_Button()==S5DOWN)
-  74   2          {
-  75   3            key_led++;
-  76   3            if(key_led>5)
-  77   3            {
-  78   4              key_led=0;
-  79   4            }
-  80   3          switch (key_led) 
-  81   3          {
-  82   4            case 1:
-  83   4            {
-  84   5              if(n==1)
-  85   5              {
-  86   6                n=0;
-  87   6                GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
-  88   6              }
-  89   5            }
-  90   4            break;
-  91   4            
-  92   4            case 2:
-  93   4            {
-  94   5              if(K==1)
-  95   5              {
-  96   6                K=0;
-  97   6                GPIO_WritePin(GPIO_P0, GPIO_Pin_1 ,1); 
-  98   6              }
-  99   5            }
- 100   4            break;
- 101   4            
- 102   4            case 3:
- 103   4            {
- 104   5              if(d==1)
- 105   5              {
- 106   6                d=0;
- 107   6                GPIO_WritePin(GPIO_P0, GPIO_Pin_2 ,1); 
- 108   6            
- 109   6              }
- 110   5            }
- 111   4            break;
- 112   4          
- 113   4         }
-C51 COMPILER V9.54   MAIN                                                                  02/20/2020 19:45:47 PAGE 3   
-
- 114   3        
- 115   3        }
- 116   2       }
- 117   1        
- 118   1      }
- 119          
+  54   3            {
+  55   4              key_led=1;
+  56   4            }
+  57   3          }
+  58   2          switch(key_led) 
+  59   2          {
+  60   3            case 1:
+  61   3            {
+  62   4              P0=0xff;
+  63   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+  64   4              delay_ms(200);
+  65   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1);
+  66   4              
+  67   4            }
+  68   3            break;
+  69   3            
+  70   3            case 2:
+  71   3            {
+  72   4              P0=0xff;
+  73   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+  74   4              delay_ms(400);
+  75   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
+  76   4            }
+  77   3            break;
+  78   3            
+  79   3            case 3:
+  80   3            {
+  81   4              P0=0xff;
+  82   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+  83   4              delay_ms(800);
+  84   4              GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
+  85   4            }
+  86   3            break;
+  87   3          
+  88   3         }
+  89   2      
+  90   2       }
+  91   1        
+  92   1      }
+  93          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    231    ----
+   CODE SIZE        =    194    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      2      12
+   DATA SIZE        =   ----       4
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      3    ----
+   BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 

@@ -16,9 +16,7 @@
 #define LED6_Pin GPIO_Pin_6
 
 u16 cnt = 0;    //timer0计数
-u16 n=0;
-u16 K=0;
-u16 d=0;
+u8 n=0;
 
 void	GPIO_config(void)
 {
@@ -47,20 +45,21 @@ void	Timer_config(void)
 
 void timer0_int (void) interrupt TIMER0_VECTOR
 {  	
-	 
-    cnt++;
-	  if(cnt ==1000) 
+    cnt++ ;
+	  if(cnt ==2000) 
 		{ 
 			cnt=0;
-		  n=1;
+			n=1;
+			
 		}
+		
 }
 
 
 /******************** 主函数 **************************/
 void main(void)
 {
-  u16 key_led=0;
+  u16 key_led=0,san=0;
 	GPIO_config();
 	Timer_config();
 	EA = 1;
@@ -69,18 +68,36 @@ void main(void)
 		P2=0x80;
 		if(GetKeyVal_Button()==S5DOWN)
 		{
-			key_led=1;
-		}
-	  if(n==1)
-		{
-			n=0;
-		  GPIO_WritePin(GPIO_P0, GPIO_Pin_1 ,1); 
-		}else
-		{
-		  GPIO_WritePin(GPIO_P0, GPIO_Pin_1 ,0); 
-		}
 		
-	}
+				key_led=1;
+	  }	
+		
+		switch (key_led)
+		{
+			case 0:
+			{
+			  P0=0xff;
+				if(n==1)
+				{
+					n=0;
+			    GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
+					san++;
+					if(san==25)
+					{
+					 key_led=1;
+					}
+			   }
+			}
+			break;
+			
+			case 1:
+			{
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+			}
+			break;
+		}
+	
+  }
 	
 }
 

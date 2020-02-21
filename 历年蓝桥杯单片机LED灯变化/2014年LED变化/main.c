@@ -4,9 +4,6 @@
 #include  "timer.h"
 #include  "key.h"
 
-#define BUZZER   P06
-
-
 #define LED0_Pin GPIO_Pin_0
 #define LED1_Pin GPIO_Pin_1
 #define LED2_Pin GPIO_Pin_2
@@ -15,10 +12,14 @@
 #define LED5_Pin GPIO_Pin_5
 #define LED6_Pin GPIO_Pin_6
 
-u16 cnt = 0;    //timer0计数
-bit n=0;
-bit K=0;
-bit d=0;
+void All_Init(void)
+{
+	
+	P0 = 0xff;					//关闭数码管
+	P2 = (P2 & 0x1f) | 0xa0;	//打开Y5C
+	P0 = 0x00;					//关闭蜂鸣器、继电器
+	P2 = P2 & 0x1f;
+}
 
 void	GPIO_config(void)
 {
@@ -29,96 +30,63 @@ void	GPIO_config(void)
 	GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);
 	GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);
 }
-
-void	Timer_config(void)
+/*
+void TWO_init(u8 pinx)
 {
-	TIM_InitTypeDef		TIM_InitStructure;					//结构定义
-	TIM_InitStructure.TIM_Mode      = TIM_8BitAutoReload;	//指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM_8BitAutoReload,TIM_16BitAutoReloadNoMask
-	TIM_InitStructure.TIM_Polity    = PolityLow;			//指定中断优先级, PolityHigh,PolityLow
-	TIM_InitStructure.TIM_Interrupt = ENABLE;//DISABLE;				//中断是否允许,   ENABLE或DISABLE
-	TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;			//指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
-	TIM_InitStructure.TIM_ClkOut    = ENABLE;				//是否输出高速脉冲, ENABLE或DISABLE
-	TIM_InitStructure.TIM_Value     = 5;		//初值,
-	TIM_InitStructure.TIM_Run       = ENABLE;				//是否初始化后启动定时器, ENABLE或DISABLE
-	Timer_Inilize(Timer0,&TIM_InitStructure);				//初始化Timer0	  Timer0,Timer1,Timer2
+	
+	
 }
-
-
-
-void timer0_int (void) interrupt TIMER0_VECTOR
-{  	
-    cnt++ ;
-	  if(cnt ==200) 
-		{ 
-			cnt=0;
-			n=1;
-			
-		}else if(cnt ==400)
-		{
-			cnt=0;
-			K=1;
-		}else if(cnt ==800)
-		{
-			cnt=0;
-			d=1;
-		}
-		
-}
-
-
+*/
 /******************** 主函数 **************************/
 void main(void)
 {
-  u16 key_led=0;
+  u16 key_led=1;
+	All_Init();
 	GPIO_config();
-	Timer_config();
-	EA = 1;
 	while(1)
 	{
+		
 		P2=0x80;
 		if(GetKeyVal_Button()==S5DOWN)
 		{
 			key_led++;
-			if(key_led>5)
+			if(key_led>3)
 			{
-				key_led=0;
+				key_led=1;
 			}
-		switch (key_led) 
+		}
+		switch(key_led) 
     {
       case 1:
       {
-				if(n==1)
-				{
-					n=0;
-					GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
-				}
+				P0=0xff;
+			  GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+		    delay_ms(200);
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1);
+				
 			}
 			break;
 			
 			case 2:
       {
-				if(K==1)
-				{
-					K=0;
-				  GPIO_WritePin(GPIO_P0, GPIO_Pin_1 ,1); 
-				}
+			  P0=0xff;
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+			  delay_ms(400);
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
 			}
 			break;
 			
 			case 3:
       {
-				if(d==1)
-				{
-					d=0;
-				  GPIO_WritePin(GPIO_P0, GPIO_Pin_2 ,1); 
-			
-				}
+				P0=0xff;
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+			  delay_ms(800);
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
 			}
 			break;
 		
 	 }
-	
-  }
+
  }
 	
 }

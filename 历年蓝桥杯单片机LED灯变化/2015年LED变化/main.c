@@ -16,9 +16,7 @@
 #define LED6_Pin GPIO_Pin_6
 
 u16 cnt = 0;    //timer0¼ÆÊý
-bit n=0;
-bit K=0;
-bit d=0;
+u8 n=0;
 
 void	GPIO_config(void)
 {
@@ -48,7 +46,7 @@ void	Timer_config(void)
 void timer0_int (void) interrupt TIMER0_VECTOR
 {  	
     cnt++ ;
-	  if(cnt ==200) 
+	  if(cnt ==10000) 
 		{ 
 			cnt=0;
 			n=1;
@@ -70,20 +68,31 @@ void main(void)
 		P2=0x80;
 		if(GetKeyVal_Button()==S5DOWN)
 		{
-			key_led=1;
+		
+				key_led=1;
+	  }	
+		
+		switch (key_led)
+		{
+			case 0:
+			{
+			 P0=0xff;
+				if(n==1)
+				{
+					n=0;
+			    GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
+			   }
+			}
+			break;
+			
+			case 1:
+			{
+				GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
+			}
+			break;
 		}
 	
-			if(key_led==1)
-		{
-			GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
-		}else
-		{
-			
-			 GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,0); 
-		   delay_ms(1000);
-			 GPIO_WritePin(GPIO_P0, GPIO_Pin_0 ,1); 
-		}
-	}
+  }
 	
 }
 
