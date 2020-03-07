@@ -4,6 +4,8 @@
  //LED_On(LED_PORT , LED0_Pin , ON);
 //LED_On(LED_PORT , LED1_Pin , ON);
 //上述两条语句执行完，LED0亮。
+#define LEDs_NUM sizeof(LED)/ sizeof(LED[0])
+extern u8 code LED[] = {LED0_Pin, LED1_Pin, LED2_Pin, LED3_Pin, LED4_Pin, LED5_Pin, LED6_Pin, LED7_Pin};
 
 void LED_On(u8 led_port,u8 led_pin )
 {

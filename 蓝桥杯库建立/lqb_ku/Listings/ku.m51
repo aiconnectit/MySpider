@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        03/07/2020  12:39:37  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/07/2020  21:06:42  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-D:\MDK5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\bsp_led.obj, .\Objects\gpio_ex.obj, .\Objects\main.obj TO .\Ob
->> jects\ku PRINT (.\Listings\ku.m51)
+D:\MDK5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\bsp_led.obj, .\Objects\gpio_ex.obj, .\Objects\main.obj, .\Obje
+>> cts\Key.obj TO .\Objects\ku PRINT (.\Listings\ku.m51)
 
 
 MEMORY MODEL: SMALL
@@ -14,6 +14,7 @@ INPUT MODULES INCLUDED:
   .\Objects\bsp_led.obj (BSP_LED)
   .\Objects\gpio_ex.obj (GPIO_EX)
   .\Objects\main.obj (MAIN)
+  .\Objects\Key.obj (KEY)
   D:\MDK5\C51\LIB\C51S.LIB (?C_INIT)
   D:\MDK5\C51\LIB\C51S.LIB (?C?UIDIV)
   D:\MDK5\C51\LIB\C51S.LIB (?C?SLDIV)
@@ -29,10 +30,10 @@ LINK MAP OF MODULE:  .\Objects\ku (?C_STARTUP)
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
             DATA    0008H     0006H     UNIT         ?DT?MAIN
-            DATA    000EH     0002H     UNIT         _DATA_GROUP_
-                    0010H     0010H                  *** GAP ***
+            DATA    000EH     0001H     UNIT         ?DT?_LED_LEFTTORIGHT?BSP_LED
+                    000FH     0011H                  *** GAP ***
             BIT     0020H.0   0000H.2   UNIT         ?BI?MAIN
-            BIT     0020H.2   0000H.1   UNIT         ?BI?_GPIO_WRITEPIN?GPIO_EX
+            BIT     0020H.2   0000H.1   UNIT         _BIT_GROUP_
                     0020H.3   0000H.5                *** GAP ***
             IDATA   0021H     0001H     UNIT         ?STACK
 
@@ -46,44 +47,35 @@ LINK MAP OF MODULE:  .\Objects\ku (?C_STARTUP)
             CODE    0249H     0044H     UNIT         ?C?LDIV
             CODE    028DH     0033H     UNIT         ?PR?_LED_LEFTTORIGHT?BSP_LED
             CODE    02C0H     002CH     UNIT         ?PR?_GPIO_READPIN?GPIO_EX
-            CODE    02ECH     0029H     UNIT         ?PR?MAIN?MAIN
-            CODE    0315H     0023H     UNIT         ?PR?_GPIO_WRITEPIN?GPIO_EX
-            CODE    0338H     001BH     UNIT         ?PR?_GPIO_TOGGLEPIN?GPIO_EX
-            CODE    0353H     0011H     UNIT         ?C_INITSEG
-            CODE    0364H     0008H     UNIT         ?CO?MAIN
-            CODE    036CH     0005H     UNIT         ?PR?_LED_ON?BSP_LED
-            CODE    0371H     0005H     UNIT         ?PR?_LED_OFF?BSP_LED
-            CODE    0376H     0003H     UNIT         ?PR?_LED_TOGGLE?BSP_LED
+            CODE    02ECH     002CH     UNIT         ?PR?GETKEY?KEY
+            CODE    0318H     0023H     UNIT         ?PR?_GPIO_WRITEPIN?GPIO_EX
+            CODE    033BH     001BH     UNIT         ?PR?_GPIO_TOGGLEPIN?GPIO_EX
+            CODE    0356H     0014H     UNIT         ?PR?MAIN?MAIN
+            CODE    036AH     0011H     UNIT         ?C_INITSEG
+            CODE    037BH     0005H     UNIT         ?PR?_LED_ON?BSP_LED
+            CODE    0380H     0005H     UNIT         ?PR?_LED_OFF?BSP_LED
+            CODE    0385H     0003H     UNIT         ?PR?_LED_TOGGLE?BSP_LED
 
 
 
 OVERLAY MAP OF MODULE:   .\Objects\ku (?C_STARTUP)
-
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  12:39:37  PAGE 2
-
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 2
 
 
-SEGMENT                                DATA_GROUP 
+
+
+SEGMENT                                 BIT_GROUP 
   +--> CALLED SEGMENT                START    LENGTH
 ----------------------------------------------------
 ?C_C51STARTUP                        -----    -----
   +--> ?PR?MAIN?MAIN
   +--> ?C_INITSEG
 
-?PR?MAIN?MAIN                        000EH    0001H
-  +--> ?PR?_LED_LEFTTORIGHT?BSP_LED
+?PR?MAIN?MAIN                        -----    -----
+  +--> ?PR?GETKEY?KEY
+  +--> ?PR?_GPIO_WRITEPIN?GPIO_EX
 
-?PR?_LED_LEFTTORIGHT?BSP_LED         000FH    0001H
-  +--> ?CO?BSP_LED
-  +--> ?PR?_LED_TOGGLE?BSP_LED
-
-?PR?_LED_TOGGLE?BSP_LED              -----    -----
-  +--> ?PR?_GPIO_TOGGLEPIN?GPIO_EX
-
-
-
-IGNORED SYMBOLS:
-   LED
+?PR?_GPIO_WRITEPIN?GPIO_EX           0020H.2  0000H.1
 
 
 
@@ -119,9 +111,6 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   N:0000H         SYMBOL        XDATASTART
   C:0000H         LINE#         126
   C:0131H         LINE#         133
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  12:39:37  PAGE 3
-
-
   C:0133H         LINE#         134
   C:0134H         LINE#         135
   C:0135H         LINE#         136
@@ -130,6 +119,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        BSP_LED
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 3
+
+
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0080H         PUBLIC        P0
   D:0090H         PUBLIC        P1
@@ -140,58 +132,58 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   C:028DH         PUBLIC        _LED_LeftToRight
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
-  C:0376H         PUBLIC        _LED_Toggle
+  C:0385H         PUBLIC        _LED_Toggle
   D:00D8H         PUBLIC        CCON
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
   D:00F0H         PUBLIC        B
   D:00E0H         PUBLIC        ACC
-  C:0371H         PUBLIC        _LED_Off
+  C:0380H         PUBLIC        _LED_Off
   C:0003H         PUBLIC        LED
-  C:036CH         PUBLIC        _LED_On
+  C:037BH         PUBLIC        _LED_On
   D:00D0H         PUBLIC        PSW
   -------         PROC          _LED_ON
   D:0007H         SYMBOL        led_port
   D:0005H         SYMBOL        led_pin
-  C:036CH         LINE#         8
-  C:036CH         LINE#         9
-  C:036CH         LINE#         10
+  C:037BH         LINE#         10
+  C:037BH         LINE#         11
+  C:037BH         LINE#         12
   -------         ENDPROC       _LED_ON
   -------         PROC          _LED_OFF
   D:0007H         SYMBOL        led_port
   D:0005H         SYMBOL        led_pin
-  C:0371H         LINE#         13
-  C:0371H         LINE#         14
-  C:0371H         LINE#         15
+  C:0380H         LINE#         15
+  C:0380H         LINE#         16
+  C:0380H         LINE#         17
   -------         ENDPROC       _LED_OFF
   -------         PROC          _LED_TOGGLE
   D:0007H         SYMBOL        led_port
   D:0005H         SYMBOL        led_pin
-  C:0376H         LINE#         18
-  C:0376H         LINE#         19
-  C:0376H         LINE#         20
+  C:0385H         LINE#         20
+  C:0385H         LINE#         21
+  C:0385H         LINE#         22
   -------         ENDPROC       _LED_TOGGLE
   -------         PROC          _LED_LEFTTORIGHT
-  D:000FH         SYMBOL        Pinx
-  C:028DH         LINE#         23
-  C:028FH         LINE#         24
+  D:000EH         SYMBOL        Pinx
+  C:028DH         LINE#         25
   C:028FH         LINE#         26
-  C:0293H         LINE#         27
-  C:0293H         LINE#         28
-  C:0296H         LINE#         29
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  12:39:37  PAGE 4
+  C:028FH         LINE#         28
+  C:0293H         LINE#         29
+  C:0293H         LINE#         30
+  C:0296H         LINE#         31
+  C:0298H         LINE#         32
+  C:029FH         LINE#         33
+  C:029FH         LINE#         34
+  C:02A3H         LINE#         35
+  C:02A5H         LINE#         37
+  C:02A5H         LINE#         38
+  C:02B1H         LINE#         39
+  C:02B3H         LINE#         40
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 4
 
 
-  C:0298H         LINE#         30
-  C:029FH         LINE#         31
-  C:029FH         LINE#         32
-  C:02A3H         LINE#         33
-  C:02A5H         LINE#         35
-  C:02A5H         LINE#         36
-  C:02B1H         LINE#         37
-  C:02B3H         LINE#         38
-  C:02BFH         LINE#         39
-  C:02BFH         LINE#         40
+  C:02BFH         LINE#         41
+  C:02BFH         LINE#         42
   -------         ENDPROC       _LED_LEFTTORIGHT
   -------         ENDMOD        BSP_LED
 
@@ -205,31 +197,31 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   D:00C8H         PUBLIC        P5
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
-  C:0338H         PUBLIC        _GPIO_TogglePin
+  C:033BH         PUBLIC        _GPIO_TogglePin
   D:00D8H         PUBLIC        CCON
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
   C:02C0H         PUBLIC        _GPIO_ReadPin
   D:00F0H         PUBLIC        B
   D:00E0H         PUBLIC        ACC
-  C:0315H         PUBLIC        _GPIO_WritePin
+  C:0318H         PUBLIC        _GPIO_WritePin
   D:00D0H         PUBLIC        PSW
   -------         PROC          _GPIO_WRITEPIN
   D:0007H         SYMBOL        GPIO
   D:0005H         SYMBOL        Pinx
   B:0020H.2       SYMBOL        Level
-  C:0315H         LINE#         5
-  C:0315H         LINE#         6
-  C:0315H         LINE#         7
-  C:031EH         LINE#         8
-  C:0327H         LINE#         9
-  C:032AH         LINE#         10
-  C:032AH         LINE#         11
-  C:032EH         LINE#         12
-  C:0333H         LINE#         14
-  C:0335H         LINE#         15
-  C:0335H         LINE#         16
-  C:0337H         LINE#         17
+  C:0318H         LINE#         5
+  C:0318H         LINE#         6
+  C:0318H         LINE#         7
+  C:0321H         LINE#         8
+  C:032AH         LINE#         9
+  C:032DH         LINE#         10
+  C:032DH         LINE#         11
+  C:0331H         LINE#         12
+  C:0336H         LINE#         14
+  C:0338H         LINE#         15
+  C:0338H         LINE#         16
+  C:033AH         LINE#         17
   -------         ENDPROC       _GPIO_WRITEPIN
   -------         PROC          _GPIO_READPIN
   D:0007H         SYMBOL        GPIO
@@ -239,9 +231,6 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   C:02C0H         LINE#         21
   C:02C9H         LINE#         22
   C:02D2H         LINE#         23
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  12:39:37  PAGE 5
-
-
   C:02D5H         LINE#         24
   C:02D5H         LINE#         25
   C:02E3H         LINE#         26
@@ -250,16 +239,19 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   C:02E9H         LINE#         31
   C:02EBH         LINE#         32
   -------         ENDPROC       _GPIO_READPIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 5
+
+
   -------         PROC          _GPIO_TOGGLEPIN
   D:0007H         SYMBOL        GPIO
   D:0005H         SYMBOL        Pinx
-  C:0338H         LINE#         34
-  C:0338H         LINE#         35
-  C:0338H         LINE#         36
-  C:0341H         LINE#         37
-  C:034AH         LINE#         38
-  C:0350H         LINE#         40
-  C:0352H         LINE#         41
+  C:033BH         LINE#         34
+  C:033BH         LINE#         35
+  C:033BH         LINE#         36
+  C:0344H         LINE#         37
+  C:034DH         LINE#         38
+  C:0353H         LINE#         40
+  C:0355H         LINE#         41
   -------         ENDPROC       _GPIO_TOGGLEPIN
   -------         ENDMOD        GPIO_EX
 
@@ -274,15 +266,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   D:00C8H         PUBLIC        P5
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
+  D:000AH         PUBLIC        LEDs_NUM
   D:00D8H         PUBLIC        CCON
-  C:02ECH         PUBLIC        main
-  D:000AH         PUBLIC        LED_NUM
+  C:0356H         PUBLIC        main
   D:000CH         PUBLIC        mode
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
   D:00F0H         PUBLIC        B
   D:00E0H         PUBLIC        ACC
-  C:0364H         PUBLIC        LED
   B:0020H.0       PUBLIC        mode0_next
   B:0020H.1       PUBLIC        mode1_next
   D:00D0H         PUBLIC        PSW
@@ -290,43 +281,75 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   -------         DO            
   D:0008H         SYMBOL        cnt
   -------         ENDDO         
-  C:01BDH         LINE#         14
-  C:01DAH         LINE#         17
-  C:01F3H         LINE#         18
-  C:020CH         LINE#         19
-  C:022EH         LINE#         21
+  C:01BDH         LINE#         16
+  C:01DAH         LINE#         19
+  C:01F3H         LINE#         20
+  C:020CH         LINE#         21
+  C:022EH         LINE#         23
   -------         ENDPROC       TIMER0_INT
   -------         PROC          MAIN
-  -------         DO            
-  D:000EH         SYMBOL        i
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  12:39:37  PAGE 6
-
-
-  -------         ENDDO         
-  C:02ECH         LINE#         24
-  C:02ECH         LINE#         25
-  C:02ECH         LINE#         26
-  C:02ECH         LINE#         27
-  C:02ECH         LINE#         28
-  C:02EFH         LINE#         29
-  C:02F7H         LINE#         30
-  C:02F7H         LINE#         31
-  C:02F7H         LINE#         32
-  C:02F7H         LINE#         34
-  C:02FAH         LINE#         35
-  C:02FAH         LINE#         36
-  C:02FCH         LINE#         37
-  C:0301H         LINE#         38
-  C:030AH         LINE#         39
-  C:030AH         LINE#         40
-  C:030FH         LINE#         41
-  C:0311H         LINE#         42
-  C:0311H         LINE#         43
-  C:0313H         LINE#         45
-  C:0313H         LINE#         46
-  C:0313H         LINE#         47
+  C:0356H         LINE#         25
+  C:0356H         LINE#         26
+  C:0356H         LINE#         28
+  C:0359H         LINE#         29
+  C:0359H         LINE#         30
+  C:0359H         LINE#         31
+  C:035FH         LINE#         32
+  C:035FH         LINE#         33
+  C:0368H         LINE#         34
+  C:0368H         LINE#         36
   -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 6
+
+
   -------         ENDMOD        MAIN
+
+  -------         MODULE        KEY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  C:02ECH         PUBLIC        getkey
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00F0H         PUBLIC        B
+  D:00E0H         PUBLIC        ACC
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GETKEY
+  -------         DO            
+  D:0001H         SYMBOL        key_old
+  D:0006H         SYMBOL        key_now
+  D:0005H         SYMBOL        tmp
+  D:0007H         SYMBOL        keyval
+  -------         ENDDO         
+  C:02ECH         LINE#         3
+  C:02ECH         LINE#         4
+  C:02ECH         LINE#         5
+  C:02EEH         LINE#         7
+  C:02F1H         LINE#         8
+  C:02F6H         LINE#         9
+  C:02F7H         LINE#         10
+  C:0307H         LINE#         11
+  C:0307H         LINE#         12
+  C:0309H         LINE#         13
+  C:030BH         LINE#         15
+  C:030DH         LINE#         16
+  C:030FH         LINE#         18
+  C:0311H         LINE#         19
+  C:0313H         LINE#         21
+  C:0315H         LINE#         22
+  C:0315H         LINE#         23
+  C:0315H         LINE#         24
+  C:0317H         LINE#         25
+  C:0317H         LINE#         26
+  -------         ENDPROC       GETKEY
+  -------         ENDMOD        KEY
 
   -------         MODULE        ?C?UIDIV
   C:000EH         PUBLIC        ?C?UIDIV
@@ -336,13 +359,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
   C:0249H         PUBLIC        ?C?SLDIV
   -------         ENDMOD        ?C?SLDIV
 
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/07/2020  21:06:42  PAGE 7
+
+
   -------         MODULE        ?C?ULDIV
   C:009FH         PUBLIC        ?C?ULDIV
   -------         ENDMOD        ?C?ULDIV
-
-*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
-    SYMBOL:  LED
-    MODULE:  .\Objects\main.obj (MAIN)
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_LED_ON?BSP_LED
@@ -351,10 +373,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\ku (?C_STARTUP)
     SEGMENT: ?PR?_LED_OFF?BSP_LED
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_GPIO_READPIN?GPIO_EX
+    SEGMENT: ?PR?_LED_LEFTTORIGHT?BSP_LED
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?CO?MAIN
+    SEGMENT: ?PR?_GPIO_READPIN?GPIO_EX
 
-Program Size: data=17.3 xdata=0 code=889
-LINK/LOCATE RUN COMPLETE.  4 WARNING(S),  1 ERROR(S)
+Program Size: data=16.3 xdata=0 code=904
+LINK/LOCATE RUN COMPLETE.  4 WARNING(S),  0 ERROR(S)

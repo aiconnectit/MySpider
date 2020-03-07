@@ -19,7 +19,7 @@ CPU DLL:         S8051.DLL V3.100.0.0
 Dialog DLL:      DP51.DLL V2.62.0.1 
 <h2>Project:</h2>
 D:\gitku\MySpider\À¶ÇÅ±­¿â½¨Á¢\lqb_ku\ku.uvproj
-Project File Date:  03/06/2020
+Project File Date:  03/07/2020
 
 <h2>Output:</h2>
 Rebuild target 'Target 1'
@@ -27,20 +27,19 @@ assembling STARTUP.A51...
 compiling bsp_led.c...
 compiling gpio_ex.c...
 compiling main.c...
+compiling Key.c...
 linking...
-*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
-    SYMBOL:  LED
-    MODULE:  .\Objects\main.obj (MAIN)
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_LED_ON?BSP_LED
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_LED_OFF?BSP_LED
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_GPIO_READPIN?GPIO_EX
+    SEGMENT: ?PR?_LED_LEFTTORIGHT?BSP_LED
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?CO?MAIN
-Program Size: data=17.3 xdata=0 code=889
-Target not created.
+    SEGMENT: ?PR?_GPIO_READPIN?GPIO_EX
+Program Size: data=16.3 xdata=0 code=904
+creating hex file from ".\Objects\ku"...
+".\Objects\ku" - 0 Error(s), 4 Warning(s).
 </pre>
 </body>
 </html>

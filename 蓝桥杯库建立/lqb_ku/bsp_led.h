@@ -17,8 +17,6 @@
 #define LED6_Pin GPIO_Pin_6
 #define LED7_Pin GPIO_Pin_7
 
-#define LEDs_NUM sizeof(LED)/ sizeof(LED[0])
-u8 code LED[] = {LED0_Pin, LED1_Pin, LED2_Pin, LED3_Pin, LED4_Pin, LED5_Pin, LED6_Pin, LED7_Pin};
 
 void LED_On(u8 led_port,u8 led_pin );
 void LED_Off(u8 led_port,u8 led_pin);
