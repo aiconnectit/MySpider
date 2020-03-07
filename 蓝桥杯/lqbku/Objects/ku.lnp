@@ -1,0 +1,6 @@
+".\Objects\STARTUP.obj",
+".\Objects\bsp_led.obj",
+".\Objects\gpio_ex.obj",
+".\Objects\main.obj" 
+TO ".\Objects\ku" 
+PRINT(".\Listings\ku.m51")

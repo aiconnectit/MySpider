@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   BSP_LED                                                               03/07/2020 11:59:15 PAGE 1   
+C51 COMPILER V9.54   BSP_LED                                                               03/07/2020 12:39:37 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE BSP_LED
@@ -16,56 +16,54 @@ line level    source
    4           //LED_On(LED_PORT , LED0_Pin , ON);
    5          //LED_On(LED_PORT , LED1_Pin , ON);
    6          //上述两条语句执行完，LED0亮。
-   7          #define LEDs_NUM sizeof(LED)/ sizeof(LED[0])
-   8          extern u8 code LED[] = {LED0_Pin, LED1_Pin, LED2_Pin, LED3_Pin, LED4_Pin, LED5_Pin, LED6_Pin, LED7_Pin};
-   9          
-  10          void LED_On(u8 led_port,u8 led_pin )
-  11          {
-  12   1        GPIO_WritePin(led_port ,led_pin , ON);
-  13   1      }
-  14          
-  15          void LED_Off(u8 led_port,u8 led_pin)
-  16          {
-  17   1        GPIO_WritePin(led_port ,led_pin , OFF);
-  18   1      }
-  19          
-  20          void LED_Toggle(u8 led_port,u8 led_pin)
-  21          {
-  22   1        GPIO_TogglePin(led_port , led_pin );
-  23   1      }
-  24          
-  25          void LED_LeftToRight(u8 Pinx)
-  26          {
-  27   1        
-  28   1        if (Pinx == 0) //仅点亮Left的LED
-  29   1        {
-  30   2          LED_Toggle(LED_PORT, LED[0]);  
-  31   2        }
-  32   1        else if (Pinx >= LEDs_NUM) //仅熄灭Right的LED
-  33   1        {
-  34   2          LED_Toggle(LED_PORT, LED[LEDs_NUM-1]);
-  35   2        }
-  36   1        else //先点亮右边的LED，再熄灭左边的
-  37   1        {   
-  38   2          LED_Toggle(LED_PORT, LED[Pinx]);
-  39   2          Pinx--;
-  40   2          LED_Toggle(LED_PORT, LED[Pinx]);    
-  41   2        }
-  42   1      }
+   7          
+   8          void LED_On(u8 led_port,u8 led_pin )
+   9          {
+  10   1        GPIO_WritePin(led_port ,led_pin , ON);
+  11   1      }
+  12          
+  13          void LED_Off(u8 led_port,u8 led_pin)
+  14          {
+  15   1        GPIO_WritePin(led_port ,led_pin , OFF);
+  16   1      }
+  17          
+  18          void LED_Toggle(u8 led_port,u8 led_pin)
+  19          {
+  20   1        GPIO_TogglePin(led_port , led_pin );
+  21   1      }
+  22          
+  23          void LED_LeftToRight(u8 Pinx)
+  24          {
+  25   1        
+  26   1        if (Pinx == 0) //仅点亮Left的LED
+  27   1        {
+  28   2          LED_Toggle(LED_PORT, LED[0]);  
+  29   2        }
+  30   1        else if (Pinx >= LEDs_NUM) //仅熄灭Right的LED
+  31   1        {
+  32   2          LED_Toggle(LED_PORT, LED[LEDs_NUM-1]);
+  33   2        }
+  34   1        else //先点亮右边的LED，再熄灭左边的
+  35   1        {   
+  36   2          LED_Toggle(LED_PORT, LED[Pinx]);
+  37   2          Pinx--;
+  38   2          LED_Toggle(LED_PORT, LED[Pinx]);    
+  39   2        }
+  40   1      }
+  41          
+  42          
   43          
   44          
   45          
-  46          
-  47          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =     64    ----
    CONSTANT SIZE    =      8    ----
-C51 COMPILER V9.54   BSP_LED                                                               03/07/2020 11:59:15 PAGE 2   
-
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   BSP_LED                                                               03/07/2020 12:39:37 PAGE 2   
+
    DATA SIZE        =   ----       1
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

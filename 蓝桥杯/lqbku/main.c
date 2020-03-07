@@ -10,7 +10,7 @@ bit mode0_next=0;
 bit mode1_next=0; 
 
 unsigned int mode=0;
-unsigned int LED_NUM=8;
+extern LEDs_NUM= 8;
 void timer0_int (void) interrupt TIMER0_VECTOR
 {  
 	  static unsigned int cnt=0; 
@@ -25,7 +25,7 @@ void main()
 {
   while(1)
   {
-    u8 i = 0;
+    unsigned char i = 0;
     switch (mode) 
     {
       case MODE_0:
@@ -35,7 +35,7 @@ void main()
          {
             mode0_next = 0;
             LED_LeftToRight(i);
-            if( i == LED_NUM) 
+            if( i == LEDs_NUM) 
             {
               mode = MODE_1;
               break;
