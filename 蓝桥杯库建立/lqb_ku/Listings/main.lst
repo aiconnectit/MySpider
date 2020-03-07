@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   MAIN                                                                  03/07/2020 21:06:41 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  03/07/2020 21:18:54 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
@@ -34,21 +34,20 @@ line level    source
   24          
   25          void main()
   26          {
-  27   1      
-  28   1        P2=0x80;
-  29   1        while(1)
-  30   1        {
-  31   2           if(getkey()==5)
-  32   2           {
-  33   3             GPIO_WritePin(GPIO_P0,GPIO_Pin_1,1);
-  34   3           }
-  35   2      
-  36   2         }
-  37   1      }
+  27   1        P2=0x80;
+  28   1        while(1)
+  29   1        {
+  30   2           if(getkey()==5)
+  31   2           {
+  32   3             LED_On(GPIO_P0,GPIO_Pin_1);
+  33   3           }
+  34   2        
+  35   2         }
+  36   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    160    ----
+   CODE SIZE        =    158    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

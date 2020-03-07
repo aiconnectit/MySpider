@@ -24,14 +24,13 @@ void timer0_int(void) interrupt TIMER0_VECTOR
 
 void main()
 {
-
 	P2=0x80;
   while(1)
   {
      if(getkey()==5)
 		 {
-			 GPIO_WritePin(GPIO_P0,GPIO_Pin_1,1);
+		   LED_On(GPIO_P0,GPIO_Pin_1);
 		 }
-
+	
    }
 }
