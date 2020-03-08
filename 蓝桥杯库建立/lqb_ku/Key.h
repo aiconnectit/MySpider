@@ -7,6 +7,7 @@
 #define s6key	6
 #define s5key	5
 #define s4key	4
+#define ke_of 0xff
 
 extern u8 getkey(void);	
 

@@ -4,7 +4,7 @@ u8 getkey(void)
 {
 	u8 key_old=0x0f;		
 	u8 key_now, tmp, keyval;
-	P3 = 0xff;
+	P3 = ke_of;
 	key_now=P3&0x0f;		
 	tmp=key_old^key_now;	
 		switch(tmp)
